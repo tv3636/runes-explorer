@@ -1,0 +1,72 @@
+{ "frames": {
+   "0": {
+    "frame": { "x": 0, "y": 0, "w": 803, "h": 334 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 803, "h": 334 },
+    "sourceSize": { "w": 803, "h": 334 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.38-x64",
+  "image": "room.png",
+  "format": "RGBA8888",
+  "size": { "w": 803, "h": 334 },
+  "scale": "1",
+  "frameTags": [
+    { "name": "play", "from": 0, "to": 0, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "BG layer1", "opacity": 255, "blendMode": "normal" },
+   { "name": "Floor", "opacity": 255, "blendMode": "normal" },
+   { "name": "ceiling", "opacity": 255, "blendMode": "normal" },
+   { "name": "BG layer2", "opacity": 255, "blendMode": "normal" },
+   { "name": "cyber cracks", "opacity": 255, "blendMode": "normal" },
+   { "name": "sword1", "opacity": 255, "blendMode": "normal" },
+   { "name": "paintings1", "opacity": 255, "blendMode": "normal" },
+   { "name": "card_spade", "opacity": 255, "blendMode": "normal" },
+   { "name": "card_soul", "opacity": 255, "blendMode": "normal" },
+   { "name": "card_pony", "opacity": 255, "blendMode": "normal" },
+   { "name": "rabbit", "opacity": 255, "blendMode": "normal" },
+   { "name": "carpet", "opacity": 255, "blendMode": "normal" },
+   { "name": "vials", "opacity": 255, "blendMode": "normal" },
+   { "name": "lights1", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 7", "opacity": 255, "blendMode": "normal" },
+   { "name": "desk1", "opacity": 255, "blendMode": "normal" },
+   { "name": "wall cabinet1", "opacity": 255, "blendMode": "normal" },
+   { "name": "side table 3", "opacity": 255, "blendMode": "normal" },
+   { "name": "runiverse map", "opacity": 255, "blendMode": "normal" },
+   { "name": "plant3", "opacity": 255, "blendMode": "normal" },
+   { "name": "light knob", "opacity": 255, "blendMode": "normal" },
+   { "name": "wall neon1", "opacity": 255, "blendMode": "normal" },
+   { "name": "lamp2", "opacity": 255, "blendMode": "normal" },
+   { "name": "hexagon window large", "opacity": 255, "blendMode": "normal" },
+   { "name": "outside neon", "opacity": 255, "blendMode": "normal" },
+   { "name": "sofa", "opacity": 255, "blendMode": "normal" },
+   { "name": "PC", "opacity": 255, "blendMode": "normal" },
+   { "name": "bowl of ramen", "opacity": 255, "blendMode": "normal" },
+   { "name": "chair1", "opacity": 255, "blendMode": "normal" },
+   { "name": "littering books", "opacity": 255, "blendMode": "normal" },
+   { "name": "large large bookshelve Copy Copy", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 8", "opacity": 255, "blendMode": "normal" },
+   { "name": "plant2", "opacity": 255, "blendMode": "normal" },
+   { "name": "small bookshelve Copy", "opacity": 255, "blendMode": "normal" },
+   { "name": "frog", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 9", "opacity": 255, "blendMode": "normal" },
+   { "name": "staff", "opacity": 255, "blendMode": "normal" },
+   { "name": "rabbit hole", "opacity": 255, "blendMode": "normal" },
+   { "name": "sleeping chimera cub eyes", "opacity": 255, "blendMode": "normal" },
+   { "name": "sundial", "opacity": 255, "blendMode": "normal" },
+   { "name": "lavalamp", "opacity": 255, "blendMode": "normal" },
+   { "name": "plant5", "opacity": 255, "blendMode": "normal" },
+   { "name": "etgaire Copy", "opacity": 255, "blendMode": "normal" },
+   { "name": "fishtank", "opacity": 255, "blendMode": "normal" },
+   { "name": "kraken", "opacity": 255, "blendMode": "normal" },
+   { "name": "plant4", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
