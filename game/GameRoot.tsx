@@ -5,13 +5,12 @@ import { GameComponent } from "phaser-react-tools";
 import config from "./config";
 import events from "./events";
 import { useEventEmitter, useEventListener } from "phaser-react-tools";
+import { useWindowSize } from "@react-hook/window-size/throttled";
 import Head from "next/head";
 
 type Props = {};
 
 export default function GameRoot({}: Props) {
-  console.log(config);
-  console.log(GameComponent);
   return (
     <>
       <Head>
@@ -30,7 +29,7 @@ export default function GameRoot({}: Props) {
 }
 
 export function GameWatchers({}: Props) {
-  const [width, height] = [1000, 1000];
+  const [width, height] = useWindowSize();
 
   const emitResize = useEventEmitter(events.ON_WINDOW_RESIZE);
   useEffect(() => {

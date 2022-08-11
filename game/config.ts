@@ -4,7 +4,7 @@ import { BootScene } from "./scenes/BootScene";
 
 export default {
   pixelArt: true,
-  backgroundColor: "000000",
+  backgroundColor: "123012",
 
   scene: [BootScene],
 

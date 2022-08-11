@@ -18,10 +18,7 @@ export class BootScene extends Phaser.Scene {
   gameScene: any;
   layer: any;
   landscape: any;
-  room: any;
   professor: any;
-
-  web3Controller: undefined;
 
   initialScrollY: number;
 
@@ -32,7 +29,60 @@ export class BootScene extends Phaser.Scene {
 
   preload() {
     this.load.path = "/static/game/";
-    this.load.aseprite("room", "room.png", "room.json");
+    this.load.image("background_layer1", "background_layer1.png")
+    this.load.image("background_layer2", "background_layer2.png")
+    this.load.image("backgroundlayer3_cybercracks", "background layer 3 _ cyber cracks.png")
+    this.load.image("backgroundlayer4_floor", "background layer 4_floor.png")
+    this.load.image("backgroundlayer5_ceiling", "background layer 5_ceiling.png")
+    this.load.image("backgroundlayer6_carpets", "background layer 6_carpets.png")
+    /*
+    this.load.image("cardpony", "card pony.png")
+    this.load.image("cardheart", "card heart.png")
+    this.load.image("runiversemap", "runiverse map.png")
+    this.load.image("chair1", "chair1.png")
+    this.load.image("sleepingchimeracub", "sleeping chimera cub.png")
+    this.load.image("lamp2", "lamp2.png")
+    this.load.image("fistank", "fistank.png")
+    this.load.image("rabbithole", "rabbit hole.png")
+    this.load.image("largebookshelve1", "large bookshelve 1.png")
+    this.load.image("sword2", "sword2.png")
+    this.load.image("outsideneon", "outside neon.png")
+    this.load.image("bowlorramen", "bowl or ramen.png")
+    this.load.image("lightsoff", "lights off.png")
+    this.load.image("lightknob", "light knob.png")
+    this.load.image("cardsoul", "card soul.png")
+    this.load.image("dottacurtainopen", "dotta curtain open.png")
+    this.load.image("wallneon1", "wall neon1.png")
+    this.load.image("smallbookshelve.", "small bookshelve..png")
+    this.load.image("sleepingchimeracubeyes", "sleeping chimera cub eyes.png")
+    this.load.image("lavalamp", "lavalamp.png")
+    this.load.image("lights1", "lights1.png")
+    this.load.image("sofa", "sofa.png")
+    this.load.image("dottacurtainclosed", "dotta curtain closed.png")
+    this.load.image("card_spade", "card_spade.png")
+    this.load.image("professor_reading", "professor_reading.png")
+    this.load.image("sword", "sword.png")
+    this.load.image("plant3", "plant3.png")
+    this.load.image("arcademagicmachinel", "arcade magic machinel.png")
+    this.load.image("plant2", "plant2.png")
+    this.load.image("PC", "PC.png")
+    this.load.image("wallcomputer", "wall computer.png")
+    this.load.image("wallcabinet1", "wall cabinet1.png")
+    this.load.image("cheeseburger", "cheeseburger.png")
+    this.load.image("professor_reading.json", "professor_reading.json")
+    this.load.image("plant5", "plant5.png")
+    this.load.image("sidetable3.", "side table 3..png")
+    this.load.image("plant4", "plant4.png")
+    this.load.image("cabinet1", "cabinet1.png")
+    this.load.image("paintings1", "paintings1.png")
+    this.load.image("litteringbooks", "littering books.png")
+    this.load.image("window1", "window1.png")
+    this.load.image("desk1", "desk1.png")
+    this.load.image("dottapainting", "dotta painting.png")
+    this.load.image("staff", "staff.png")
+    this.load.image("sundial", "sundial.png")
+    */
+
     this.load.aseprite("professor", "professor_reading.png", "professor_reading.json");
   }
 
@@ -46,18 +96,20 @@ export class BootScene extends Phaser.Scene {
     this.landscape = this.add.container();
     this.layer.add(this.landscape);
 
-    /*
-    const background = this.add.tileSprite(
-      0,
-      0,
-      tileBgWidth,
-      this.cameras.main.height,
-      "room"
-    );
-    background.setOrigin(0, 0);
-    this.landscape.add(background);
-    */
+    const worldView = this.cameras.main.worldView;
+    const centerX = worldView.centerX;
+    const centerY = worldView.centerY;
 
+    const background = this.add.sprite(
+      centerX,
+      200,
+      "background_layer1",
+      0
+    );
+    background.setDisplaySize(803,334);
+    //background.setOrigin(0, 0);
+    this.landscape.add(background);
+    
     const add = ({ name }: { name: string }) => {
       const layer = this.add.tileSprite(
         0,
@@ -69,12 +121,24 @@ export class BootScene extends Phaser.Scene {
       layer.setOrigin(0, 0);
       this.landscape.add(layer);
     };
-    
-    const worldView = this.cameras.main.worldView;
-    const centerX = worldView.centerX;
+
+    //'bowlorramen', 'cabinet1', 'card_spade', 'cardheart', 'cardpony', 'cardsoul', 'chair1', 'cheeseburger', 'desk1', 'dottacurtainclosed', 'dottacurtainopen', 'dottapainting', 'fistank', 'lamp2', 'largebookshelve1', 'lavalamp', 'lightknob', 'lights1', 'lightsoff', 'litteringbooks', 'outsideneon', 'paintings1', 'plant2', 'plant3', 'plant4', 'plant5', 'professor_reading', 'professor_reading.json', 'rabbithole', 'runiversemap', 'sidetable3.', 'sleepingchimeracub', 'sleepingchimeracubeyes', 'smallbookshelve.', 'sofa', 'staff', 'sundial', 'sword', 'sword2', 'wallcabinet1', 'wallcomputer', 'wallneon1', 'window1', 'PC', 'arcademagicmachinel'
+
+
+    for (var name of ['background_layer2', 'backgroundlayer3_cybercracks', 'backgroundlayer4_floor', 'backgroundlayer5_ceiling', 'backgroundlayer6_carpets']) {
+      let layer = this.add.sprite(
+        centerX,
+        200,
+        name,
+        0
+      );
+      layer.setDisplaySize(803,334);
+      //layer.setOrigin(0, 0);
+      this.landscape.add(layer);
+    }
 
     (this as any).myAsepriteLoader?.createFromAseprite("professor");
-    this.professor = this.add.sprite(centerX, 100, "professor", 0);
+    this.professor = this.add.sprite(centerX, 280, "professor", 0);
     this.professor.depth = 1;
     fadeIn(this, this.professor);
     this.professor.play({
@@ -83,7 +147,6 @@ export class BootScene extends Phaser.Scene {
     });
 
     
-
     this.scene.launch("HomeScene");
     this.gameScene = this.scene.get("HomeScene");
     this.updateCamera();
@@ -153,7 +216,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     const textureManager = this.scene.systems.textures;
-    const bgFrame = textureManager.getFrame("room");
+    const bgFrame = textureManager.getFrame("background_layer1");
     const bgWidthScaled = bgFrame.width;
 
     const tilePosX = (centerX - bgWidthScaled / 2) * -1;
