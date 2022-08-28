@@ -1,0 +1,174 @@
+{
+    "frames": {
+        "0": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 768,
+                "y": 128,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 803,
+                "h": 334
+            },
+            "duration": 100
+        },
+        "1": {
+            "frame": {
+                "x": 32,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 768,
+                "y": 128,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 803,
+                "h": 334
+            },
+            "duration": 100
+        },
+        "2": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 768,
+                "y": 128,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 803,
+                "h": 334
+            },
+            "duration": 100
+        },
+        "3": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 768,
+                "y": 128,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 803,
+                "h": 334
+            },
+            "duration": 100
+        },
+        "4": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 768,
+                "y": 128,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 803,
+                "h": 334
+            },
+            "duration": 100
+        },
+        "5": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 768,
+                "y": 128,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 803,
+                "h": 334
+            },
+            "duration": 100
+        },
+        "6": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 768,
+                "y": 128,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 803,
+                "h": 334
+            },
+            "duration": 100
+        }
+    },
+    "meta": {
+        "app": "https://www.aseprite.org/",
+        "version": "1.3-beta20-x64",
+        "image": "frog.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 96,
+            "h": 32
+        },
+        "scale": "1",
+        "frameTags": [{
+            "name": "play-frog",
+            "from": 0,
+            "to": 6,
+            "direction": "forward"
+        }],
+        "layers": [{
+            "name": "frog",
+            "opacity": 255,
+            "blendMode": "normal"
+        }],
+        "slices": []
+    }
+}

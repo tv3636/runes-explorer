@@ -18,6 +18,15 @@ export class BootScene extends Phaser.Scene {
   gameScene: any;
   layer: any;
   landscape: any;
+  cards: any;
+  curtain: any;
+  frog: any;
+  kraken: any;
+  pc: any;
+  chair: any;
+  chimera: any;
+  sword: any;
+  food: any;
   professor: any;
 
   initialScrollY: number;
@@ -29,61 +38,20 @@ export class BootScene extends Phaser.Scene {
 
   preload() {
     this.load.path = "/static/game/";
-    this.load.image("background_layer1", "background_layer1.png")
-    this.load.image("background_layer2", "background_layer2.png")
-    this.load.image("backgroundlayer3_cybercracks", "background layer 3 _ cyber cracks.png")
-    this.load.image("backgroundlayer4_floor", "background layer 4_floor.png")
-    this.load.image("backgroundlayer5_ceiling", "background layer 5_ceiling.png")
-    this.load.image("backgroundlayer6_carpets", "background layer 6_carpets.png")
-    /*
-    this.load.image("cardpony", "card pony.png")
-    this.load.image("cardheart", "card heart.png")
-    this.load.image("runiversemap", "runiverse map.png")
-    this.load.image("chair1", "chair1.png")
-    this.load.image("sleepingchimeracub", "sleeping chimera cub.png")
-    this.load.image("lamp2", "lamp2.png")
-    this.load.image("fistank", "fistank.png")
-    this.load.image("rabbithole", "rabbit hole.png")
-    this.load.image("largebookshelve1", "large bookshelve 1.png")
-    this.load.image("sword2", "sword2.png")
-    this.load.image("outsideneon", "outside neon.png")
-    this.load.image("bowlorramen", "bowl or ramen.png")
-    this.load.image("lightsoff", "lights off.png")
-    this.load.image("lightknob", "light knob.png")
-    this.load.image("cardsoul", "card soul.png")
-    this.load.image("dottacurtainopen", "dotta curtain open.png")
-    this.load.image("wallneon1", "wall neon1.png")
-    this.load.image("smallbookshelve.", "small bookshelve..png")
-    this.load.image("sleepingchimeracubeyes", "sleeping chimera cub eyes.png")
-    this.load.image("lavalamp", "lavalamp.png")
-    this.load.image("lights1", "lights1.png")
-    this.load.image("sofa", "sofa.png")
-    this.load.image("dottacurtainclosed", "dotta curtain closed.png")
-    this.load.image("card_spade", "card_spade.png")
-    this.load.image("professor_reading", "professor_reading.png")
-    this.load.image("sword", "sword.png")
-    this.load.image("plant3", "plant3.png")
-    this.load.image("arcademagicmachinel", "arcade magic machinel.png")
-    this.load.image("plant2", "plant2.png")
-    this.load.image("PC", "PC.png")
-    this.load.image("wallcomputer", "wall computer.png")
-    this.load.image("wallcabinet1", "wall cabinet1.png")
-    this.load.image("cheeseburger", "cheeseburger.png")
-    this.load.image("professor_reading.json", "professor_reading.json")
-    this.load.image("plant5", "plant5.png")
-    this.load.image("sidetable3.", "side table 3..png")
-    this.load.image("plant4", "plant4.png")
-    this.load.image("cabinet1", "cabinet1.png")
-    this.load.image("paintings1", "paintings1.png")
-    this.load.image("litteringbooks", "littering books.png")
-    this.load.image("window1", "window1.png")
-    this.load.image("desk1", "desk1.png")
-    this.load.image("dottapainting", "dotta painting.png")
-    this.load.image("staff", "staff.png")
-    this.load.image("sundial", "sundial.png")
-    */
+    this.load.image("background", "background.png")
+
+    this.load.aseprite("cards", "cards.png", "cards.json");
+    this.load.aseprite("curtain", "curtain.png", "curtain.json");
+    this.load.aseprite("frog", "frog.png", "frog.json");
+    this.load.aseprite("kraken", "kraken.png", "kraken.json");
+    this.load.aseprite("pc", "PC.png", "PC.json");
+    this.load.aseprite("chair", "chair.png", "chair.json");
+    this.load.aseprite("chimera", "chimera.png", "chimera.json");
+    this.load.aseprite("sword", "sword.png", "sword.json");
+    this.load.aseprite("food", "food.png", "food.json");
 
     this.load.aseprite("professor", "professor_reading.png", "professor_reading.json");
+    
   }
 
   create() {
@@ -103,7 +71,7 @@ export class BootScene extends Phaser.Scene {
     const background = this.add.sprite(
       centerX,
       200,
-      "background_layer1",
+      "background",
       0
     );
     background.setDisplaySize(803,334);
@@ -122,10 +90,7 @@ export class BootScene extends Phaser.Scene {
       this.landscape.add(layer);
     };
 
-    //'bowlorramen', 'cabinet1', 'card_spade', 'cardheart', 'cardpony', 'cardsoul', 'chair1', 'cheeseburger', 'desk1', 'dottacurtainclosed', 'dottacurtainopen', 'dottapainting', 'fistank', 'lamp2', 'largebookshelve1', 'lavalamp', 'lightknob', 'lights1', 'lightsoff', 'litteringbooks', 'outsideneon', 'paintings1', 'plant2', 'plant3', 'plant4', 'plant5', 'professor_reading', 'professor_reading.json', 'rabbithole', 'runiversemap', 'sidetable3.', 'sleepingchimeracub', 'sleepingchimeracubeyes', 'smallbookshelve.', 'sofa', 'staff', 'sundial', 'sword', 'sword2', 'wallcabinet1', 'wallcomputer', 'wallneon1', 'window1', 'PC', 'arcademagicmachinel'
-
-
-    for (var name of ['background_layer2', 'backgroundlayer3_cybercracks', 'backgroundlayer4_floor', 'backgroundlayer5_ceiling', 'backgroundlayer6_carpets']) {
+    for (var name of []) {
       let layer = this.add.sprite(
         centerX,
         200,
@@ -137,15 +102,89 @@ export class BootScene extends Phaser.Scene {
       this.landscape.add(layer);
     }
 
-    (this as any).myAsepriteLoader?.createFromAseprite("professor");
-    this.professor = this.add.sprite(centerX, 280, "professor", 0);
-    this.professor.depth = 1;
-    fadeIn(this, this.professor);
-    this.professor.play({
-      key: "play",
+    (this as any).myAsepriteLoader?.createFromAseprite("cards");
+    this.cards = this.add.sprite(centerX, 200, "cards", 0);
+    fadeIn(this, this.cards);
+    this.cards.play({
+      key: "play-cards",
       repeat: -1,
     });
 
+    (this as any).myAsepriteLoader?.createFromAseprite("curtain");
+    this.curtain = this.add.sprite(centerX, 200, "curtain", 0);
+    fadeIn(this, this.curtain);
+
+    this.curtain.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+      console.log('clicked curtain!');
+      this.curtain.play({
+        key: "play-curtain",
+        repeat: false,
+      });
+    });
+
+    (this as any).myAsepriteLoader?.createFromAseprite("frog");
+    this.frog = this.add.sprite(centerX, 200, "frog", 0);
+    fadeIn(this, this.frog);
+
+    this.frog.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+      console.log('clicked frog!');
+      this.frog.play({
+        key: "play-frog",
+        repeat: false,
+      });
+    });
+
+    (this as any).myAsepriteLoader?.createFromAseprite("kraken");
+    this.kraken = this.add.sprite(centerX, 200, "kraken", 0);
+    fadeIn(this, this.kraken);
+    this.kraken.play({
+      key: "play-kraken",
+      repeat: -1,
+    });
+
+    (this as any).myAsepriteLoader?.createFromAseprite("pc");
+    this.pc = this.add.sprite(centerX, 200, "pc", 0);
+    fadeIn(this, this.pc);
+    this.pc.play({
+      key: "play-PC",
+      repeat: -1,
+    });
+
+    (this as any).myAsepriteLoader?.createFromAseprite("chimera");
+    this.chimera = this.add.sprite(centerX, 200, "chimera", 0);
+    fadeIn(this, this.chimera);
+    this.chimera.play({
+      key: "play-chimera",
+      repeat: -1,
+    });
+
+    (this as any).myAsepriteLoader?.createFromAseprite("sword");
+    this.sword = this.add.sprite(centerX, 200, "sword", 0);
+    fadeIn(this, this.sword);
+
+    this.sword.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+      console.log('clicked sword!');
+      this.sword.play({
+        key: "play-sword",
+        repeat: false,
+      });
+    });
+
+    (this as any).myAsepriteLoader?.createFromAseprite("food");
+    this.food = this.add.sprite(centerX, 200, "food", 0);
+    fadeIn(this, this.food);
+
+    this.food.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+      console.log('clicked food!');
+      this.food.play({
+        key: "play-food",
+        repeat: false,
+      });
+    });
+
+    (this as any).myAsepriteLoader?.createFromAseprite("chair");
+    this.chair = this.add.sprite(centerX, 200, "chair", 0);
+    
     
     this.scene.launch("HomeScene");
     this.gameScene = this.scene.get("HomeScene");
@@ -216,7 +255,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     const textureManager = this.scene.systems.textures;
-    const bgFrame = textureManager.getFrame("background_layer1");
+    const bgFrame = textureManager.getFrame("background");
     const bgWidthScaled = bgFrame.width;
 
     const tilePosX = (centerX - bgWidthScaled / 2) * -1;
