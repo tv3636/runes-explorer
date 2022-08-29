@@ -1,6 +1,28 @@
 import events from "../events";
 
 const BREAKPOINT = 768;
+const elements = [
+  'cards',
+  'curtain',
+  'frog',
+  'kraken',
+  'pc',
+  'chair',
+  'chimera',
+  'sword',
+  'food'
+]
+
+const steps: any = {
+  cards: 4,
+  curtain: 2,
+  food: 2,
+  sword: 2
+}
+
+const static_elements = [
+  'chair'
+]
 
 export function fadeIn(
   scene: Phaser.Scene,
@@ -27,7 +49,6 @@ export class BootScene extends Phaser.Scene {
   chimera: any;
   sword: any;
   food: any;
-  professor: any;
 
   initialScrollY: number;
 
@@ -40,18 +61,9 @@ export class BootScene extends Phaser.Scene {
     this.load.path = "/static/game/";
     this.load.image("background", "background.png")
 
-    this.load.aseprite("cards", "cards.png", "cards.json");
-    this.load.aseprite("curtain", "curtain.png", "curtain.json");
-    this.load.aseprite("frog", "frog.png", "frog.json");
-    this.load.aseprite("kraken", "kraken.png", "kraken.json");
-    this.load.aseprite("pc", "PC.png", "PC.json");
-    this.load.aseprite("chair", "chair.png", "chair.json");
-    this.load.aseprite("chimera", "chimera.png", "chimera.json");
-    this.load.aseprite("sword", "sword.png", "sword.json");
-    this.load.aseprite("food", "food.png", "food.json");
-
-    this.load.aseprite("professor", "professor_reading.png", "professor_reading.json");
-    
+    for (var element of elements) {
+      this.load.aseprite(element, `${element}.png`, `${element}.json`);
+    }
   }
 
   create() {
@@ -68,6 +80,13 @@ export class BootScene extends Phaser.Scene {
     const centerX = worldView.centerX;
     const centerY = worldView.centerY;
 
+    const step: any = {};
+    const stepSprites = Object.keys(steps);
+    
+    for (var element of stepSprites) {
+      step[element] = 0;
+    }
+
     const background = this.add.sprite(
       centerX,
       200,
@@ -78,113 +97,28 @@ export class BootScene extends Phaser.Scene {
     //background.setOrigin(0, 0);
     this.landscape.add(background);
     
-    const add = ({ name }: { name: string }) => {
-      const layer = this.add.tileSprite(
-        0,
-        0,
-        tileBgWidth,
-        this.cameras.main.height,
-        name
-      );
-      layer.setOrigin(0, 0);
-      this.landscape.add(layer);
+    const add = (name: string) => {
+      (this as any).myAsepriteLoader?.createFromAseprite(name);
+      (this as any)[name] = this.add.sprite(centerX, 200, name, 0);
+      fadeIn(this, (this as any)[name]);
+
+      if (!static_elements.includes(name)) {
+        (this as any)[name].setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+          (this as any)[name].play({
+            key: stepSprites.includes(name) ? `play-${name}-${step[name]}` : `play-${name}`,
+            repeat: false,
+          });
+
+          if (stepSprites.includes(name)) {
+            step[name] = (step[name] + 1) % steps[name]
+          }
+        });
+      }
     };
 
-    for (var name of []) {
-      let layer = this.add.sprite(
-        centerX,
-        200,
-        name,
-        0
-      );
-      layer.setDisplaySize(803,334);
-      //layer.setOrigin(0, 0);
-      this.landscape.add(layer);
+    for (var element of elements) {
+      add(element);
     }
-
-    (this as any).myAsepriteLoader?.createFromAseprite("cards");
-    this.cards = this.add.sprite(centerX, 200, "cards", 0);
-    fadeIn(this, this.cards);
-    this.cards.play({
-      key: "play-cards",
-      repeat: -1,
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("curtain");
-    this.curtain = this.add.sprite(centerX, 200, "curtain", 0);
-    fadeIn(this, this.curtain);
-
-    this.curtain.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-      console.log('clicked curtain!');
-      this.curtain.play({
-        key: "play-curtain",
-        repeat: false,
-      });
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("frog");
-    this.frog = this.add.sprite(centerX, 200, "frog", 0);
-    fadeIn(this, this.frog);
-
-    this.frog.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-      console.log('clicked frog!');
-      this.frog.play({
-        key: "play-frog",
-        repeat: false,
-      });
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("kraken");
-    this.kraken = this.add.sprite(centerX, 200, "kraken", 0);
-    fadeIn(this, this.kraken);
-    this.kraken.play({
-      key: "play-kraken",
-      repeat: -1,
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("pc");
-    this.pc = this.add.sprite(centerX, 200, "pc", 0);
-    fadeIn(this, this.pc);
-    this.pc.play({
-      key: "play-PC",
-      repeat: -1,
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("chimera");
-    this.chimera = this.add.sprite(centerX, 200, "chimera", 0);
-    fadeIn(this, this.chimera);
-    this.chimera.play({
-      key: "play-chimera",
-      repeat: -1,
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("sword");
-    this.sword = this.add.sprite(centerX, 200, "sword", 0);
-    fadeIn(this, this.sword);
-
-    this.sword.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-      console.log('clicked sword!');
-      this.sword.play({
-        key: "play-sword",
-        repeat: false,
-      });
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("food");
-    this.food = this.add.sprite(centerX, 200, "food", 0);
-    fadeIn(this, this.food);
-
-    this.food.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-      console.log('clicked food!');
-      this.food.play({
-        key: "play-food",
-        repeat: false,
-      });
-    });
-
-    (this as any).myAsepriteLoader?.createFromAseprite("chair");
-    this.chair = this.add.sprite(centerX, 200, "chair", 0);
-    
     
     this.scene.launch("HomeScene");
     this.gameScene = this.scene.get("HomeScene");
