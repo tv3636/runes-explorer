@@ -1,12 +1,14 @@
 import { AsepriteLayersAnimationLoaderPlugin } from "./plugins/asepriteLayersAnimationLoaderPlugin";
 import TextTypingPlugin from "phaser3-rex-plugins/plugins/texttyping-plugin";
+import { IntroScene } from "./scenes/IntroScene";
 import { BootScene } from "./scenes/BootScene";
+import { FallingScene } from "./scenes/FallingScene";
 
 export default {
   pixelArt: true,
-  backgroundColor: "123012",
+  backgroundColor: "000000",
 
-  scene: [BootScene],
+  scene: [IntroScene, FallingScene, BootScene],
 
   scale: {
     mode: Phaser.Scale.RESIZE,

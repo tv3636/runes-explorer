@@ -1,33 +1,9 @@
 import events from "../events";
 
 const BREAKPOINT = 768;
-const elements = [
-  'cards',
-  'curtain',
-  'frog',
-  'kraken',
-  'pc',
-  'chair',
-  'chimera',
-  'sword',
-  'food',
-  'cybercracks'
-]
-
-const steps: any = {
-  cards: 4,
-  curtain: 2,
-  food: 2,
-  sword: 2
-}
-
-const static_elements = [
-  'chair'
-]
-
-const looping = [
-  'cybercracks'
-]
+const elements: any = [
+  'animated'
+];
 
 export function fadeIn(
   scene: Phaser.Scene,
@@ -41,31 +17,23 @@ export function fadeIn(
   });
 }
 
-export class BootScene extends Phaser.Scene {
+export class IntroScene extends Phaser.Scene {
   gameScene: any;
   layer: any;
   landscape: any;
-  cards: any;
-  curtain: any;
-  frog: any;
-  kraken: any;
-  pc: any;
-  chair: any;
-  chimera: any;
-  sword: any;
-  food: any;
-  cybercracks: any;
 
-  initialScrollY: number;
+  bootScene: any;
 
   constructor() {
-    super("BootScene");
-    this.initialScrollY = 0;
+    super("IntroScene");
   }
 
   preload() {
     this.load.path = "/static/game/";
     this.load.image("background", "background.png")
+
+    this.load.path = "/static/game/intro/";
+    this.load.image("staticImage", "staticImage.png")
 
     for (var element of elements) {
       this.load.aseprite(element, `${element}.png`, `${element}.json`);
@@ -86,93 +54,40 @@ export class BootScene extends Phaser.Scene {
     const centerX = worldView.centerX;
     const centerY = worldView.centerY;
 
-    const step: any = {};
-    const stepSprites = Object.keys(steps);
-    
-    for (var element of stepSprites) {
-      step[element] = 0;
-    }
-
-    const background = this.add.sprite(
+    const staticImage = this.add.sprite(
       centerX,
       200,
-      "background",
+      "staticImage",
       0
     );
-    background.setDisplaySize(803,334);
-    //background.setOrigin(0, 0);
-    this.landscape.add(background);
-    
+    staticImage.setDisplaySize(158,200);
+    staticImage.setInteractive({ useHandCursor: true }).on("pointerup", () => {
+      this.scene.launch("FallingScene");
+      this.bootScene = this.scene.get("FallingScene");
+      this.scene.remove("IntroScene");
+    });
+    this.landscape.add(staticImage);
+
     const add = (name: string) => {
       (this as any).myAsepriteLoader?.createFromAseprite(name);
       (this as any)[name] = this.add.sprite(centerX, 200, name, 0);
       fadeIn(this, (this as any)[name]);
 
-      if (!static_elements.includes(name) && !looping.includes(name)) {
-        (this as any)[name].setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-          (this as any)[name].play({
-            key: stepSprites.includes(name) ? `play-${name}-${step[name]}` : `play-${name}`,
-            repeat: false,
-          });
-
-          if (stepSprites.includes(name)) {
-            step[name] = (step[name] + 1) % steps[name]
-          }
-        });
-      } else if (looping.includes(name)) {
-        (this as any)[name].play({
-          key: `play-${name}`,
-          repeat: -1,
-        });
-      }
+      (this as any)[name].play({
+        key: `play-${name}`,
+        repeat: -1,
+      });
     };
 
     for (var element of elements) {
       add(element);
     }
     
+
     this.updateCamera();
     //this.addParallax();
-
     this.cameras.main.fadeIn(500, 0, 0, 0);
-  }
 
-  addParallax() {
-    const camera = this.cameras.main;
-    this.initialScrollY = camera.scrollY;
-
-    const minScroll = this.initialScrollY;
-    const maxScroll = -220;
-
-    this.input.on(
-      "wheel",
-      (
-        deltaY: number,
-      ) => {
-        const camera = this.cameras.main;
-
-        camera.scrollY += deltaY * 0.01;
-        camera.scrollY = Phaser.Math.Clamp(
-          camera.scrollY,
-          minScroll,
-          maxScroll
-        );
-
-        let i = 0;
-        this.landscape.each((tile: any, idx: number) => {
-          tile.tilePositionY += deltaY * 0.05 * i;
-
-          const maxTileY = i * 20;
-          tile.tilePositionY = Phaser.Math.Clamp(
-            tile.tilePositionY,
-            0,
-            maxTileY
-          );
-          i++;
-        });
-
-      }
-    );
   }
 
   updateCamera() {
@@ -219,4 +134,7 @@ export class BootScene extends Phaser.Scene {
   resize() {
     this.updateCamera();
   }
+
+  
+
 }
