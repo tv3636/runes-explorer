@@ -9,7 +9,6 @@ const elements = [
   'pc',
   'chair',
   'chimera',
-  'sword',
   'food',
   'cybercracks'
 ]
@@ -27,6 +26,14 @@ const static_elements = [
 
 const looping = [
   'cybercracks'
+]
+
+const dialogue = [
+  'Oh! Hello there!',
+  'I was wondering when you might arrive…I hope the landing wasn’t too rough.',
+  'Congratulations on making it anyway, and don’t worry, you are safe here.',
+  'I imagine you have some questions.',
+  'What would you like to know?',
 ]
 
 export function fadeIn(
@@ -52,9 +59,10 @@ export class BootScene extends Phaser.Scene {
   pc: any;
   chair: any;
   chimera: any;
-  sword: any;
   food: any;
   cybercracks: any;
+
+  textbox: any;
 
   initialScrollY: number;
 
@@ -91,7 +99,9 @@ export class BootScene extends Phaser.Scene {
     
     for (var element of stepSprites) {
       step[element] = 0;
-    }
+    }    
+
+    this.showDialogue();
 
     const background = this.add.sprite(
       centerX,
@@ -218,5 +228,50 @@ export class BootScene extends Phaser.Scene {
 
   resize() {
     this.updateCamera();
+  }
+
+  showDialogue() {
+    let centerX = this.cameras.main.worldView.centerX;
+    let wrap_width = 350;
+
+    this.textbox = this.add.rectangle(centerX + 15, 325, wrap_width, 50, 0x808080, 0.5);
+    //this.textbox.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+    //  console.log('clicked text!');
+    //});    
+
+    const summonText = this.add.text(0, 0, "", {
+      fontFamily: "Alagard",
+      fontSize: "20px",
+      color: "white",
+      metrics: {
+        fontSize: 43,
+        ascent: 35,
+        descent: 8,
+      },
+      wordWrap: {
+        width: wrap_width * 1.75
+      },
+    });
+    summonText.scale = 0.5;
+    summonText.lineSpacing = -15;
+    summonText.setOrigin(0, 0);
+    summonText.setPosition(centerX - 140, 305);
+    summonText.depth = 1;
+    //this.summonText = summonText;
+
+    const rexTextTyping = this.plugins.get("rexTextTyping") as any;
+    if (rexTextTyping) {
+      const typing = rexTextTyping.add(summonText, {
+        speed: 30,
+      });
+      typing.start(dialogue.shift());
+      typing.on('complete', function(){
+        if (dialogue.length > 0) {
+          setTimeout(() => {
+            typing.start(dialogue.shift());
+          }, 3000);
+        }
+      });
+    }
   }
 }

@@ -1827,10 +1827,10 @@ phaser-react-tools@^1.0.4:
   resolved "https://registry.yarnpkg.com/phaser-react-tools/-/phaser-react-tools-1.0.4.tgz#84514c65436a426978196f6e8d69314268297560"
   integrity sha512-Oam6AZuJaAU94sNg5tsiukAJpD0HPIu0AY2dEln2/nO8VvUYRlrI4mR8FLbfA5sdxCOSCUDuFyOkDwZWPHjU4w==
 
-phaser3-rex-plugins@^1.1.53:
-  version "1.1.72"
-  resolved "https://registry.yarnpkg.com/phaser3-rex-plugins/-/phaser3-rex-plugins-1.1.72.tgz#602f09a8a7a0d23bf25a340be6342e429bfbb544"
-  integrity sha512-08OUue1XhOClwtKt/6YlrBcrIt0ZSBo+gDT8nSdReatnnJUfnQB6uabKfL7LzLTaad5nVpPF/OpJ8Q/C/HDPlQ==
+phaser3-rex-plugins@^1.1.74:
+  version "1.1.74"
+  resolved "https://registry.yarnpkg.com/phaser3-rex-plugins/-/phaser3-rex-plugins-1.1.74.tgz#b34ad2958687429f33d24b81baa096fec3f71d6f"
+  integrity sha512-NJgpMkvrWu6UN4kXf9IN+me7b44MOb+pebxNpGOENSeqXOciGi02YSR5k2bcN/DEY2tCsZNCqg8UD6AnTM817A==
   dependencies:
     eventemitter3 "^3.1.2"
     handlebars "^4.7.7"

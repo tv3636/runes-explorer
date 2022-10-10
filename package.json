@@ -15,7 +15,7 @@
     "next": "12.2.3",
     "phaser": "3.50.1",
     "phaser-react-tools": "^1.0.4",
-    "phaser3-rex-plugins": "^1.1.53",
+    "phaser3-rex-plugins": "^1.1.74",
     "react": "16.14.0",
     "react-dom": "16.14.0"
   },

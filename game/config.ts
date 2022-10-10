@@ -4,11 +4,13 @@ import { IntroScene } from "./scenes/IntroScene";
 import { BootScene } from "./scenes/BootScene";
 import { FallingScene } from "./scenes/FallingScene";
 
+//scene: [IntroScene, FallingScene, BootScene]
+
 export default {
   pixelArt: true,
   backgroundColor: "000000",
 
-  scene: [IntroScene, FallingScene, BootScene],
+  scene: [BootScene],
 
   scale: {
     mode: Phaser.Scale.RESIZE,
