@@ -45,7 +45,16 @@ const questions: any = {
   ]
 }
 
+const responses: any = {
+  'Where am I?': 'My home! …Calista’s Citadel. Anyway, this is my study. The books I have collected here are to help people like you to understand Forgotten Runes and the Runiverse!',
+  'How did I get here?': 'I ask myself the same question all the time! {*Professor laughs*} Quite the journey, huh? You fell into our Universe through a worm-hole by the looks of it, but you’re in the right place.',
+  'Who are you?': 'Me? I’m the Professor. This is my place and as you can see… I collect books.',
+  'What is Forgotten Runes?': 'Great Question! Let’s see…where did I put that book…'
+}
+
 let curLine: any;
+let mainDialog = true;
+let answers: any = [];
 
 export function fadeIn(
   scene: Phaser.Scene,
@@ -255,6 +264,7 @@ export class BootScene extends Phaser.Scene {
 
     this.textbox.on('pointerdown',  () => {
       console.log('clicked textbox');
+      mainDialog = true;
       this.updateLine();
     });
 
@@ -290,7 +300,7 @@ export class BootScene extends Phaser.Scene {
       this.updateLine();
       
       this.typing.on('complete', () =>{
-        if (curLine in questions) {
+        if (curLine in questions && mainDialog) {
           for (var i = 0; i < questions[curLine].length; i++) {
             let lineHeight = 12;
             let answer = this.add.text(centerX - 140, yStart + 8 + ((i + 1) * lineHeight), questions[curLine][i], dialogueStyle);
@@ -301,8 +311,13 @@ export class BootScene extends Phaser.Scene {
               hitArea: new Phaser.Geom.Rectangle(0, 0, answer.width, answer.height),
               callback: Phaser.Geom.Rectangle.Contains,
             });
-            answer.on('pointerdown', function () {
+            answer.on('pointerdown',  () => {
               console.log('clicked ' + questions[curLine][i]);
+              for (var a of answers) {
+                a.destroy();
+              }
+              this.typing.start(responses[questions[curLine][i]]);
+              mainDialog = false;
             });
 
             answer.on('pointerover', function () {
@@ -313,16 +328,21 @@ export class BootScene extends Phaser.Scene {
             answer.on('pointerout', function () {
               answer.setShadow(0, 0, undefined, 0);
             })
+
+            answers.push(answer);
           }
         }
       });
     }
   }
 
-  updateLine() {
-    if (dialogue.length > 0) {
-      curLine = dialogue.shift();
-      this.typing.start(curLine);
+  updateLine(newline?: string) {
+    if (dialogue.length > 0 && !newline) {
+      curLine = dialogue.shift();      
+    } else if (newline) {
+      curLine = newline;
     }
+
+    this.typing.start(curLine);
   }
 }
