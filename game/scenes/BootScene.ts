@@ -36,6 +36,17 @@ const dialogue = [
   'What would you like to know?',
 ]
 
+const questions: any = {
+  'What would you like to know?': [
+    'Where am I?',
+    'How did I get here?',
+    'Who are you?',
+    'What is Forgotten Runes?'
+  ]
+}
+
+let curLine: any;
+
 export function fadeIn(
   scene: Phaser.Scene,
   gameObject: Phaser.GameObjects.Sprite,
@@ -63,6 +74,7 @@ export class BootScene extends Phaser.Scene {
   cybercracks: any;
 
   textbox: any;
+  typing: any;
 
   initialScrollY: number;
 
@@ -234,12 +246,19 @@ export class BootScene extends Phaser.Scene {
     let centerX = this.cameras.main.worldView.centerX;
     let wrap_width = 350;
 
-    this.textbox = this.add.rectangle(centerX + 15, 325, wrap_width, 50, 0x808080, 0.5);
-    //this.textbox.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-    //  console.log('clicked text!');
-    //});    
+    this.textbox = this.add.rectangle(centerX + 15, 340, wrap_width, 75, 0x808080, 0.5);
+    this.textbox.setInteractive({ 
+      useHandCursor: true, 
+      hitArea: new Phaser.Geom.Rectangle(0, 0, wrap_width, 50),
+      callback: Phaser.Geom.Rectangle.Contains,
+    });
 
-    const summonText = this.add.text(0, 0, "", {
+    this.textbox.on('pointerdown',  () => {
+      console.log('clicked textbox');
+      this.updateLine();
+    });
+
+    let dialogueStyle = {
       fontFamily: "Alagard",
       fontSize: "20px",
       color: "white",
@@ -251,27 +270,59 @@ export class BootScene extends Phaser.Scene {
       wordWrap: {
         width: wrap_width * 1.75
       },
-    });
+    }
+
+    const summonText = this.add.text(0, 0, "", dialogueStyle);
+    let yStart = 305;
+    
     summonText.scale = 0.5;
     summonText.lineSpacing = -15;
     summonText.setOrigin(0, 0);
-    summonText.setPosition(centerX - 140, 305);
+    summonText.setPosition(centerX - 140, yStart);
     summonText.depth = 1;
-    //this.summonText = summonText;
 
     const rexTextTyping = this.plugins.get("rexTextTyping") as any;
     if (rexTextTyping) {
-      const typing = rexTextTyping.add(summonText, {
+      this.typing = rexTextTyping.add(summonText, {
         speed: 30,
       });
-      typing.start(dialogue.shift());
-      typing.on('complete', function(){
-        if (dialogue.length > 0) {
-          setTimeout(() => {
-            typing.start(dialogue.shift());
-          }, 3000);
+
+      this.updateLine();
+      
+      this.typing.on('complete', () =>{
+        if (curLine in questions) {
+          for (var i = 0; i < questions[curLine].length; i++) {
+            let lineHeight = 12;
+            let answer = this.add.text(centerX - 140, yStart + 8 + ((i + 1) * lineHeight), questions[curLine][i], dialogueStyle);
+            answer.scale = 0.5;
+            answer.setStroke('black', 5);
+            answer.setInteractive({ 
+              useHandCursor: true, 
+              hitArea: new Phaser.Geom.Rectangle(0, 0, answer.width, answer.height),
+              callback: Phaser.Geom.Rectangle.Contains,
+            });
+            answer.on('pointerdown', function () {
+              console.log('clicked ' + questions[curLine][i]);
+            });
+
+            answer.on('pointerover', function () {
+              console.log('hover?');
+              answer.setShadow(5, 5, 'black', 5);
+            })
+
+            answer.on('pointerout', function () {
+              answer.setShadow(0, 0, undefined, 0);
+            })
+          }
         }
       });
+    }
+  }
+
+  updateLine() {
+    if (dialogue.length > 0) {
+      curLine = dialogue.shift();
+      this.typing.start(curLine);
     }
   }
 }
