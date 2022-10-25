@@ -10,7 +10,7 @@ const elements = [
   'chair',
   'chimera',
   'food',
-  'cybercracks'
+  'cybercracks',
 ]
 
 const steps: any = {
@@ -81,6 +81,7 @@ export class BootScene extends Phaser.Scene {
   chimera: any;
   food: any;
   cybercracks: any;
+  professor: any;
 
   textbox: any;
   typing: any;
@@ -94,7 +95,8 @@ export class BootScene extends Phaser.Scene {
 
   preload() {
     this.load.path = "/static/game/";
-    this.load.image("background", "background.png")
+    this.load.image("background", "background.png");
+    this.load.aseprite('professor', `professor.png`, `professor.json`);
 
     for (var element of elements) {
       this.load.aseprite(element, `${element}.png`, `${element}.json`);
@@ -133,11 +135,15 @@ export class BootScene extends Phaser.Scene {
     background.setDisplaySize(803,334);
     //background.setOrigin(0, 0);
     this.landscape.add(background);
-    
-    const add = (name: string) => {
+
+    const baseAdd = (name: string) => {
       (this as any).myAsepriteLoader?.createFromAseprite(name);
       (this as any)[name] = this.add.sprite(centerX, 200, name, 0);
       fadeIn(this, (this as any)[name]);
+    }
+    
+    const add = (name: string) => {
+      baseAdd(name);
 
       if (!static_elements.includes(name) && !looping.includes(name)) {
         (this as any)[name].setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
@@ -161,6 +167,15 @@ export class BootScene extends Phaser.Scene {
     for (var element of elements) {
       add(element);
     }
+
+
+    baseAdd('professor');
+    this.professor.setPosition(centerX, 272);
+    this.professor.scale = 1.65;
+    this.professor.play({
+      key: `idle`,
+      repeat: -1,
+    })
     
     this.updateCamera();
     //this.addParallax();
@@ -264,7 +279,6 @@ export class BootScene extends Phaser.Scene {
 
     this.textbox.on('pointerdown',  () => {
       console.log('clicked textbox');
-      mainDialog = true;
       this.updateLine();
     });
 
@@ -312,16 +326,13 @@ export class BootScene extends Phaser.Scene {
               callback: Phaser.Geom.Rectangle.Contains,
             });
             answer.on('pointerdown',  () => {
-              console.log('clicked ' + questions[curLine][i]);
               for (var a of answers) {
                 a.destroy();
               }
-              this.typing.start(responses[questions[curLine][i]]);
-              mainDialog = false;
+              this.updateLine(responses[questions[curLine][i]]);              
             });
 
             answer.on('pointerover', function () {
-              console.log('hover?');
               answer.setShadow(5, 5, 'black', 5);
             })
 
@@ -332,17 +343,55 @@ export class BootScene extends Phaser.Scene {
             answers.push(answer);
           }
         }
+
+        // Professor animation
+        if (this.typing.text == 'Great Question! Let’s see…where did I put that book…') {
+          this.walk('right', 200);
+        }
+
       });
     }
   }
 
-  updateLine(newline?: string) {
-    if (dialogue.length > 0 && !newline) {
-      curLine = dialogue.shift();      
-    } else if (newline) {
-      curLine = newline;
-    }
+  walk(direction: string, distance: number) {
+    this.professor.play({
+      key: direction,
+      repeat: -1
+    })
 
-    this.typing.start(curLine);
+    let endpoint = this.professor.x + distance;
+    let speed = 55;
+
+    let move = (x: number) => {
+      console.log(this.professor.x, this.professor.x + x);
+      this.professor.x += x;
+
+      if (this.professor.x < endpoint) {
+        setTimeout(() => {
+          move(distance/speed);
+        }, speed);
+      } else {
+        this.professor.play({
+          key: 'book reading',
+          repeat: -1,
+        })
+      }
+    };
+
+    move(distance/speed);
+  }
+
+  updateLine(newline?: string) {
+    if (!newline) {
+      if (dialogue.length > 0) {
+        curLine = dialogue.shift();
+      }
+
+      this.typing.start(curLine);
+      mainDialog = true;      
+    } else if (newline) {
+      this.typing.start(newline);
+      mainDialog = false;
+    }    
   }
 }
