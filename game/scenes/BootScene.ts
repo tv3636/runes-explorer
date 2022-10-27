@@ -1,6 +1,9 @@
 import events from "../events";
 
 const BREAKPOINT = 768;
+const FIRST_WALK = 200;
+const FLOOR = 266;
+
 const elements = [
   'cards',
   'curtain',
@@ -28,7 +31,7 @@ const looping = [
   'cybercracks'
 ]
 
-const dialogue = [
+let dialogue = [
   'Oh! Hello there!',
   'I was wondering when you might arrive…I hope the landing wasn’t too rough.',
   'Congratulations on making it anyway, and don’t worry, you are safe here.',
@@ -82,6 +85,7 @@ export class BootScene extends Phaser.Scene {
   food: any;
   cybercracks: any;
   professor: any;
+  professor_enlightened: any;
 
   textbox: any;
   typing: any;
@@ -97,6 +101,7 @@ export class BootScene extends Phaser.Scene {
     this.load.path = "/static/game/";
     this.load.image("background", "background.png");
     this.load.aseprite('professor', `professor.png`, `professor.json`);
+    this.load.aseprite('professor_enlightened', 'professor_enlightened.png', 'professor_enlightened.json');
 
     for (var element of elements) {
       this.load.aseprite(element, `${element}.png`, `${element}.json`);
@@ -170,12 +175,17 @@ export class BootScene extends Phaser.Scene {
 
 
     baseAdd('professor');
-    this.professor.setPosition(centerX, 272);
-    this.professor.scale = 1.65;
+    this.professor.setPosition(centerX, FLOOR);
+    this.professor.scale = 2;
     this.professor.play({
       key: `idle`,
       repeat: -1,
     })
+
+    baseAdd('professor_enlightened');
+    this.professor_enlightened.visible = false;
+    this.professor_enlightened.setPosition(centerX + FIRST_WALK + 4, FLOOR - 97);
+    this.professor_enlightened.scale = 2;
     
     this.updateCamera();
     //this.addParallax();
@@ -346,7 +356,18 @@ export class BootScene extends Phaser.Scene {
 
         // Professor animation
         if (this.typing.text == 'Great Question! Let’s see…where did I put that book…') {
-          this.walk('right', 200);
+          this.walk('right', FIRST_WALK);
+        }
+
+        // Professor enlightenment animation
+        if (this.typing.text == 'Ah ha! Here we go!') {
+          this.professor.visible = false;
+          this.professor_enlightened.visible = true;
+
+          this.professor_enlightened.play({
+            key: 'main',
+            repeat: 0,
+          })
         }
 
       });
@@ -363,7 +384,6 @@ export class BootScene extends Phaser.Scene {
     let speed = 55;
 
     let move = (x: number) => {
-      console.log(this.professor.x, this.professor.x + x);
       this.professor.x += x;
 
       if (this.professor.x < endpoint) {
@@ -375,6 +395,14 @@ export class BootScene extends Phaser.Scene {
           key: 'book reading',
           repeat: -1,
         })
+
+        dialogue = [
+          'Let me warn you, this isn’t any ordinary book… Hold on tight.',
+          'Now if I can just find the right page…',
+          'Ah ha! Here we go!',          
+        ]
+
+        this.updateLine();
       }
     };
 
