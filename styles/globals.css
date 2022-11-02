@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Alagard";
+  src: url("/alagard.otf");
+}
+
+
 html,
 body {
   padding: 0;
