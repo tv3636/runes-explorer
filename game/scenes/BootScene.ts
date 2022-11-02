@@ -1,7 +1,7 @@
 import events from "../events";
 
 const BREAKPOINT = 768;
-const FIRST_WALK = 200;
+const FIRST_WALK = 180;
 const FLOOR = 266;
 
 const elements = [
@@ -14,6 +14,7 @@ const elements = [
   'chimera',
   'food',
   'cybercracks',
+  'lightknob'
 ]
 
 const steps: any = {
@@ -84,13 +85,16 @@ export class BootScene extends Phaser.Scene {
   chimera: any;
   food: any;
   cybercracks: any;
+  lightknob: any;
   professor: any;
   professor_enlightened: any;
 
+  summonText: any;
   textbox: any;
   typing: any;
 
   initialScrollY: number;
+  centerX: any;
 
   constructor() {
     super("BootScene");
@@ -100,6 +104,7 @@ export class BootScene extends Phaser.Scene {
   preload() {
     this.load.path = "/static/game/";
     this.load.image("background", "background.png");
+    this.load.image("background_black", "background-black.png");
     this.load.aseprite('professor', `professor.png`, `professor.json`);
     this.load.aseprite('professor_enlightened', 'professor_enlightened.png', 'professor_enlightened.json');
 
@@ -109,21 +114,21 @@ export class BootScene extends Phaser.Scene {
   }
 
   create() {
-    const self = this;
     this.cameras.main.setRoundPixels(true);
     this.layer = this.add.container();
-
-    const tileBgWidth = this.cameras.main.width;
 
     this.landscape = this.add.container();
     this.layer.add(this.landscape);
 
     const worldView = this.cameras.main.worldView;
-    const centerX = worldView.centerX;
-    const centerY = worldView.centerY;
+    this.centerX = worldView.centerX;
 
     const step: any = {};
     const stepSprites = Object.keys(steps);
+
+    // TODO - figure out how to enable this
+    this.lights.enable()
+    this.lights.addLight(0, this.centerX, 100);
     
     for (var element of stepSprites) {
       step[element] = 0;
@@ -132,7 +137,7 @@ export class BootScene extends Phaser.Scene {
     this.showDialogue();
 
     const background = this.add.sprite(
-      centerX,
+      this.centerX,
       200,
       "background",
       0
@@ -143,7 +148,7 @@ export class BootScene extends Phaser.Scene {
 
     const baseAdd = (name: string) => {
       (this as any).myAsepriteLoader?.createFromAseprite(name);
-      (this as any)[name] = this.add.sprite(centerX, 200, name, 0);
+      (this as any)[name] = this.add.sprite(this.centerX, 200, name, 0).setPipeline('Light2D');
       fadeIn(this, (this as any)[name]);
     }
     
@@ -175,7 +180,7 @@ export class BootScene extends Phaser.Scene {
 
 
     baseAdd('professor');
-    this.professor.setPosition(centerX, FLOOR);
+    this.professor.setPosition(this.centerX, FLOOR);
     this.professor.scale = 2;
     this.professor.play({
       key: `idle`,
@@ -184,13 +189,13 @@ export class BootScene extends Phaser.Scene {
 
     baseAdd('professor_enlightened');
     this.professor_enlightened.visible = false;
-    this.professor_enlightened.setPosition(centerX + FIRST_WALK + 4, FLOOR - 97);
+    this.professor_enlightened.setPosition(this.centerX + FIRST_WALK + 7.5, FLOOR - 97);
     this.professor_enlightened.scale = 2;
     
     this.updateCamera();
     //this.addParallax();
 
-    this.cameras.main.fadeIn(500, 0, 0, 0);
+    this.cameras.main.fadeIn(500, 0, 0, 0);    
   }
 
   addParallax() {
@@ -277,10 +282,9 @@ export class BootScene extends Phaser.Scene {
   }
 
   showDialogue() {
-    let centerX = this.cameras.main.worldView.centerX;
     let wrap_width = 350;
 
-    this.textbox = this.add.rectangle(centerX + 15, 340, wrap_width, 75, 0x808080, 0.5);
+    this.textbox = this.add.rectangle(this.centerX + 15, 340, wrap_width, 75, 0x808080, 0.5);
     this.textbox.setInteractive({ 
       useHandCursor: true, 
       hitArea: new Phaser.Geom.Rectangle(0, 0, wrap_width, 50),
@@ -306,18 +310,18 @@ export class BootScene extends Phaser.Scene {
       },
     }
 
-    const summonText = this.add.text(0, 0, "", dialogueStyle);
+    this.summonText = this.add.text(0, 0, "", dialogueStyle);
     let yStart = 305;
     
-    summonText.scale = 0.5;
-    summonText.lineSpacing = -15;
-    summonText.setOrigin(0, 0);
-    summonText.setPosition(centerX - 140, yStart);
-    summonText.depth = 1;
+    this.summonText.scale = 0.5;
+    this.summonText.lineSpacing = -15;
+    this.summonText.setOrigin(0, 0);
+    this.summonText.setPosition(this.centerX - 140, yStart);
+    this.summonText.depth = 1;
 
     const rexTextTyping = this.plugins.get("rexTextTyping") as any;
     if (rexTextTyping) {
-      this.typing = rexTextTyping.add(summonText, {
+      this.typing = rexTextTyping.add(this.summonText, {
         speed: 30,
       });
 
@@ -327,7 +331,7 @@ export class BootScene extends Phaser.Scene {
         if (curLine in questions && mainDialog) {
           for (var i = 0; i < questions[curLine].length; i++) {
             let lineHeight = 12;
-            let answer = this.add.text(centerX - 140, yStart + 8 + ((i + 1) * lineHeight), questions[curLine][i], dialogueStyle);
+            let answer = this.add.text(this.centerX - 140, yStart + 8 + ((i + 1) * lineHeight), questions[curLine][i], dialogueStyle);
             answer.scale = 0.5;
             answer.setStroke('black', 5);
             answer.setInteractive({ 
@@ -354,20 +358,30 @@ export class BootScene extends Phaser.Scene {
           }
         }
 
-        // Professor animation
+        // Professor walks over to book
         if (this.typing.text == 'Great Question! Let’s see…where did I put that book…') {
           this.walk('right', FIRST_WALK);
         }
 
+        // Professor opens book
+        if (this.typing.text == 'Let me warn you, this isn’t any ordinary book… Hold on tight.') {
+          this.professor.play({
+            key: 'book thinking',
+            repeat: -1
+          })
+        }
+
+        // Professor flips through book
+        if (this.typing.text == 'Now if I can just find the right page…') {
+          this.professor.play({
+            key: 'book reading',
+            repeat: -1
+          })
+        }
+
         // Professor enlightenment animation
         if (this.typing.text == 'Ah ha! Here we go!') {
-          this.professor.visible = false;
-          this.professor_enlightened.visible = true;
-
-          this.professor_enlightened.play({
-            key: 'main',
-            repeat: 0,
-          })
+          this.openBook();
         }
 
       });
@@ -381,7 +395,7 @@ export class BootScene extends Phaser.Scene {
     })
 
     let endpoint = this.professor.x + distance;
-    let speed = 55;
+    let speed = 50; // lower speed is faster
 
     let move = (x: number) => {
       this.professor.x += x;
@@ -392,8 +406,8 @@ export class BootScene extends Phaser.Scene {
         }, speed);
       } else {
         this.professor.play({
-          key: 'book reading',
-          repeat: -1,
+          key: 'book grab',
+          repeat: 0,
         })
 
         dialogue = [
@@ -422,4 +436,86 @@ export class BootScene extends Phaser.Scene {
       mainDialog = false;
     }    
   }
+
+  openBook() {
+    this.professor.visible = false;
+    this.professor_enlightened.visible = true;
+
+    let titleStyle = {
+      fontFamily: "Alagard",
+      fontSize: "44px",
+      color: "white",
+      metrics: {
+        fontSize: 43,
+        ascent: 35,
+        descent: 8,
+      },
+      wordWrap: { width: 10000 },
+    }
+
+    this.professor_enlightened.play({
+      key: 'main',
+      repeat: 0,
+    })
+
+    setTimeout(() => {
+      const black_background = this.add.sprite(
+        this.centerX,
+        180,
+        "background_black",
+        0
+      );
+      black_background.setAlpha(0);
+      black_background.setDisplaySize(803,434);
+      this.tweens.add({
+        targets: black_background,
+        alpha: { value: 1, duration: 1000, ease: "Power1" },
+      });
+
+      this.summonText.visible = false;
+
+      const titleText = this.add.text(this.centerX - 350, 200, "Book 1 - What is Forgotten Runes?", titleStyle);
+      titleText.setAlpha(0);
+      this.tweens.add({
+        targets: titleText,
+        alpha: { value: 1, duration: 250, ease: "Power1"}
+      });
+
+      setTimeout(() => {              
+        this.tweens.add({
+          targets: titleText,
+          alpha: { value: 0, duration: 1000, ease: "Power1"}
+        });
+        
+        setTimeout(() => {          
+          dialogue = ['Oops! I always forget it starts like this. Can you help me turn the lights on?'];
+          this.updateLine();
+          this.summonText.visible = true;
+
+          (this as any).myAsepriteLoader?.createFromAseprite('lightknob');
+          this.lightknob = this.add.sprite(this.centerX, 200, 'lightknob', 0).setPipeline('Light2D');
+          this.lightknob.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+            this.professor_enlightened.visible = false;
+            this.professor.visible = true;
+            this.professor.play({
+              key: 'idle',
+              repeat: -1
+            })                
+            black_background.visible = false;
+            this.lightknob.visible = false;
+            
+            dialogue = [
+              'Thanks. That’s much better.',
+              'Shall we get started?',
+              'Truth be told. It’s hard to define everything Forgotten Runes is. The answer is still being discovered.',
+              'On a basic level: Forgotten Runes is a whole world of collaborative story-telling led by the Magic Machine.',
+              'Do you want to turn it on?'
+            ]
+            this.updateLine();
+          });
+        }, 1000);        
+      }, 5000);                            
+    }, 8000);
+  }
+
 }
