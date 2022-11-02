@@ -10,7 +10,7 @@ export default {
   pixelArt: true,
   backgroundColor: "000000",
 
-  scene: [BootScene],
+  scene: [IntroScene, FallingScene, BootScene],
 
   scale: {
     mode: Phaser.Scale.RESIZE,

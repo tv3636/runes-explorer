@@ -9,7 +9,7 @@ const elements = [
   'curtain',
   'frog',
   'kraken',
-  'pc',
+  'PC',
   'chair',
   'chimera',
   'food',
