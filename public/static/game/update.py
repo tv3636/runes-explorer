@@ -13,9 +13,13 @@ for filename in os.listdir('.'):
 		)
 
 		for frame in data['frames']:
-			frameNumber = frame[frame.find('aseprite') - 2: frame.find('aseprite') -1]
+			frameNumber = frame.split()[-1].split('.')[0]
 
 			newData['frames'][frameNumber] = data['frames'][frame]
 
+		newData['frames'][str(len(newData['frames']))] = newData['frames']['0']
+
+		#print(json.dumps(newData, indent=4))
+
 		with open(filename, 'w') as f:
-			json.dump(newData, f)
+			json.dump(newData, f, indent=4)

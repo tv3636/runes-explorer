@@ -5,31 +5,48 @@ const FIRST_WALK = 180;
 const FLOOR = 266;
 
 const elements = [
+  'bookshelve_1',
+  'bookshelve_2',
   'cards',
-  'curtain',
-  'frog',
+  'curtain',  
   'kraken',
-  'PC',
-  'chair',
+  'PC',  
   'chimera',
   'food',
   'cybercracks',
-  'lightknob'
+  'lightknob',
+  'tv',
+  'frog',
+  'pc_screen',
+  'chair',
+  'rabbit',
+  'machine'
 ]
 
 const steps: any = {
   cards: 4,
   curtain: 2,
   food: 2,
-  sword: 2
+  sword: 2,
 }
 
 const static_elements = [
-  'chair'
+  'chair',
+  'bookshelve_1'
 ]
 
 const looping = [
   'cybercracks'
+]
+
+const connected: any = {
+  'pc_screen': 'PC'
+}
+
+const hidden = [
+  'pc_screen',
+  'bookshelve_2',
+  'machine',
 ]
 
 let dialogue = [
@@ -88,6 +105,12 @@ export class BootScene extends Phaser.Scene {
   lightknob: any;
   professor: any;
   professor_enlightened: any;
+  tv: any;
+  bookshelve_1: any;
+  pc_screen: any;
+  rabbit: any;
+  bookshelve_2: any;
+  machine: any;
 
   summonText: any;
   textbox: any;
@@ -126,6 +149,8 @@ export class BootScene extends Phaser.Scene {
     const step: any = {};
     const stepSprites = Object.keys(steps);
 
+    const connectedSprites = Object.keys(connected);
+
     // TODO - figure out how to enable this
     this.lights.enable()
     this.lights.addLight(0, this.centerX, 100);
@@ -150,13 +175,18 @@ export class BootScene extends Phaser.Scene {
       (this as any).myAsepriteLoader?.createFromAseprite(name);
       (this as any)[name] = this.add.sprite(this.centerX, 200, name, 0).setPipeline('Light2D');
       fadeIn(this, (this as any)[name]);
+
+      if (hidden.includes(name)) {
+        (this as any)[name].visible = false;
+      }
     }
     
     const add = (name: string) => {
       baseAdd(name);
 
-      if (!static_elements.includes(name) && !looping.includes(name)) {
-        (this as any)[name].setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+      if (!static_elements.includes(name) && !looping.includes(name)) {        
+        (this as any)[connectedSprites.includes(name) ? connected[name] : name].setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
+          (this as any)[name].visible = true;
           (this as any)[name].play({
             key: stepSprites.includes(name) ? `play-${name}-${step[name]}` : `play-${name}`,
             repeat: false,
@@ -171,7 +201,7 @@ export class BootScene extends Phaser.Scene {
           key: `play-${name}`,
           repeat: -1,
         });
-      }
+      } 
     };
 
     for (var element of elements) {
@@ -189,8 +219,8 @@ export class BootScene extends Phaser.Scene {
 
     baseAdd('professor_enlightened');
     this.professor_enlightened.visible = false;
-    this.professor_enlightened.setPosition(this.centerX + FIRST_WALK + 7.5, FLOOR - 97);
-    this.professor_enlightened.scale = 2;
+    //this.professor_enlightened.setPosition(this.centerX + FIRST_WALK + 7.5, FLOOR - 97);
+    //this.professor_enlightened.scale = 2;
     
     this.updateCamera();
     //this.addParallax();
@@ -503,6 +533,9 @@ export class BootScene extends Phaser.Scene {
             })                
             black_background.visible = false;
             this.lightknob.visible = false;
+            this.bookshelve_1.visible = false;
+            this.bookshelve_2.visible = true;
+            this.machine.visible = true;
             
             dialogue = [
               'Thanks. That’s much better.',
