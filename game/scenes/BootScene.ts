@@ -20,7 +20,10 @@ const elements = [
   'pc_screen',
   'chair',
   'rabbit',
-  'machine'
+  'machine',
+  'nightshadeplant',
+  'brain',
+  'staff',
 ]
 
 const steps: any = {
@@ -28,6 +31,7 @@ const steps: any = {
   curtain: 2,
   food: 2,
   sword: 2,
+  nightshadeplant: 2,
 }
 
 const static_elements = [
@@ -48,6 +52,10 @@ const hidden = [
   'bookshelve_2',
   'machine',
 ]
+
+const repeats: any = {
+  'chimera': 2
+}
 
 let dialogue = [
   'Oh! Hello there!',
@@ -111,6 +119,9 @@ export class BootScene extends Phaser.Scene {
   rabbit: any;
   bookshelve_2: any;
   machine: any;
+  nightshadeplant: any;
+  brain: any;
+  staff: any;
 
   summonText: any;
   textbox: any;
@@ -189,7 +200,7 @@ export class BootScene extends Phaser.Scene {
           (this as any)[name].visible = true;
           (this as any)[name].play({
             key: stepSprites.includes(name) ? `play-${name}-${step[name]}` : `play-${name}`,
-            repeat: false,
+            repeat: Object.keys(repeats).includes(name) ? repeats[name] : false,
           });
 
           if (stepSprites.includes(name)) {
