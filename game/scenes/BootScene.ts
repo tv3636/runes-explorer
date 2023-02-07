@@ -541,12 +541,15 @@ export class BootScene extends Phaser.Scene {
             this.professor.play({
               key: 'idle',
               repeat: -1
-            })                
-            black_background.visible = false;
+            })               
+            
             this.lightknob.visible = false;
             this.bookshelve_1.visible = false;
             this.bookshelve_2.visible = true;
+            this.brain.visible = false;
+            this.staff.visible = false;
             this.machine.visible = true;
+            black_background.visible = false;                      
             
             dialogue = [
               'Thanks. That’s much better.',
