@@ -24,6 +24,9 @@ const elements = [
   'nightshadeplant',
   'brain',
   'staff',
+  'sofa',
+  'neon',
+  'jellydonut'
 ]
 
 const steps: any = {
@@ -36,11 +39,13 @@ const steps: any = {
 
 const static_elements = [
   'chair',
-  'bookshelve_1'
+  'bookshelve_1',
+  'sofa'
 ]
 
 const looping = [
-  'cybercracks'
+  'cybercracks',
+  'neon',
 ]
 
 const connected: any = {
@@ -52,6 +57,10 @@ const hidden = [
   'bookshelve_2',
   'machine',
 ]
+
+const flip_hidden: any = {
+  'pc_screen': true
+}
 
 const repeats: any = {
   'chimera': 2
@@ -84,6 +93,7 @@ const responses: any = {
 let curLine: any;
 let mainDialog = true;
 let answers: any = [];
+let professorSpecial = false;
 
 export function fadeIn(
   scene: Phaser.Scene,
@@ -123,6 +133,9 @@ export class BootScene extends Phaser.Scene {
   brain: any;
   staff: any;
   flash: any;
+  sofa: any;
+  neon: any;
+  jellydonut: any;
 
   summonText: any;
   textbox: any;
@@ -199,7 +212,7 @@ export class BootScene extends Phaser.Scene {
 
       if (!static_elements.includes(name) && !looping.includes(name)) {        
         (this as any)[connectedSprites.includes(name) ? connected[name] : name].setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-          (this as any)[name].visible = true;
+          (this as any)[name].visible = Object.keys(flip_hidden).includes(name) ? flip_hidden[name] : true;
           (this as any)[name].play({
             key: stepSprites.includes(name) ? `play-${name}-${step[name]}` : `play-${name}`,
             repeat: Object.keys(repeats).includes(name) ? repeats[name] : false,
@@ -207,6 +220,11 @@ export class BootScene extends Phaser.Scene {
 
           if (stepSprites.includes(name)) {
             step[name] = (step[name] + 1) % steps[name]
+          }
+
+          // For objects that should hide themselves after one animation, and then become visible again.
+          if (Object.keys(flip_hidden).includes(name)) {
+            flip_hidden[name] = !flip_hidden[name];
           }
         });
       } else if (looping.includes(name)) {
@@ -227,7 +245,7 @@ export class BootScene extends Phaser.Scene {
     this.professor.setPosition(this.centerX, FLOOR);
     this.professor.scale = 2;
     this.professor.play({
-      key: `idle`,
+      key: `talking`,
       repeat: -1,
     })
 
@@ -407,6 +425,12 @@ export class BootScene extends Phaser.Scene {
           }
         }
 
+        this.professor.play({
+          key: 'idle',
+          repeat: -1
+        })  
+        professorSpecial = false;
+
         // Professor walks over to book
         if (this.typing.text == 'Great Question! Let’s see…where did I put that book…') {
           this.walk('right', FIRST_WALK);
@@ -414,6 +438,7 @@ export class BootScene extends Phaser.Scene {
 
         // Professor opens book
         if (this.typing.text == 'Let me warn you, this isn’t any ordinary book… Hold on tight.') {
+          professorSpecial = true;
           this.professor.play({
             key: 'book thinking',
             repeat: -1
@@ -422,6 +447,7 @@ export class BootScene extends Phaser.Scene {
 
         // Professor flips through book
         if (this.typing.text == 'Now if I can just find the right page…') {
+          professorSpecial = true;
           this.professor.play({
             key: 'book reading',
             repeat: -1
@@ -454,6 +480,7 @@ export class BootScene extends Phaser.Scene {
           move(distance/speed);
         }, speed);
       } else {
+        professorSpecial = true;
         this.professor.play({
           key: 'book grab',
           repeat: 0,
@@ -483,7 +510,14 @@ export class BootScene extends Phaser.Scene {
     } else if (newline) {
       this.typing.start(newline);
       mainDialog = false;
-    }    
+    }
+
+    if (!professorSpecial) {
+      this.professor?.play({
+        key: 'talking',
+        repeat: -1
+      })
+    }
   }
 
   openBook() {
