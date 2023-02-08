@@ -122,6 +122,7 @@ export class BootScene extends Phaser.Scene {
   nightshadeplant: any;
   brain: any;
   staff: any;
+  flash: any;
 
   summonText: any;
   textbox: any;
@@ -141,6 +142,7 @@ export class BootScene extends Phaser.Scene {
     this.load.image("background_black", "background-black.png");
     this.load.aseprite('professor', `professor.png`, `professor.json`);
     this.load.aseprite('professor_enlightened', 'professor_enlightened.png', 'professor_enlightened.json');
+    this.load.aseprite('flash', 'flash.png', 'flash.json');
 
     for (var element of elements) {
       this.load.aseprite(element, `${element}.png`, `${element}.json`);
@@ -220,6 +222,7 @@ export class BootScene extends Phaser.Scene {
     }
 
 
+    // Add special elements
     baseAdd('professor');
     this.professor.setPosition(this.centerX, FLOOR);
     this.professor.scale = 2;
@@ -230,9 +233,14 @@ export class BootScene extends Phaser.Scene {
 
     baseAdd('professor_enlightened');
     this.professor_enlightened.visible = false;
-    //this.professor_enlightened.setPosition(this.centerX + FIRST_WALK + 7.5, FLOOR - 97);
-    //this.professor_enlightened.scale = 2;
+    this.professor_enlightened.setPosition(this.centerX + FIRST_WALK + 7.5, FLOOR - 97);
+    this.professor_enlightened.scale = 2;
+
+    baseAdd('flash');
+    this.flash.visible = false;
     
+
+    // Set camera
     this.updateCamera();
     //this.addParallax();
 
@@ -481,6 +489,7 @@ export class BootScene extends Phaser.Scene {
   openBook() {
     this.professor.visible = false;
     this.professor_enlightened.visible = true;
+    this.flash.visible = true;
 
     let titleStyle = {
       fontFamily: "Alagard",
@@ -496,6 +505,11 @@ export class BootScene extends Phaser.Scene {
 
     this.professor_enlightened.play({
       key: 'main',
+      repeat: 0,
+    })
+
+    this.flash.play({
+      key: 'play-flash',
       repeat: 0,
     })
 
@@ -537,6 +551,7 @@ export class BootScene extends Phaser.Scene {
           this.lightknob = this.add.sprite(this.centerX, 200, 'lightknob', 0).setPipeline('Light2D');
           this.lightknob.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
             this.professor_enlightened.visible = false;
+            this.flash.visible = false;
             this.professor.visible = true;
             this.professor.play({
               key: 'idle',
