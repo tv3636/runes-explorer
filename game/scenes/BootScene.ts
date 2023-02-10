@@ -578,6 +578,7 @@ export class BootScene extends Phaser.Scene {
           alpha: { value: 0, duration: 1000, ease: "Power1"}
         });
         
+        this.flash.visible = false;
         setTimeout(() => {          
           dialogue = ['Oops! I always forget it starts like this. Can you help me turn the lights on?'];
           this.updateLine();
@@ -586,8 +587,7 @@ export class BootScene extends Phaser.Scene {
           (this as any).myAsepriteLoader?.createFromAseprite('lightknob');
           this.lightknob = this.add.sprite(this.centerX, 200, 'lightknob', 0).setPipeline('Light2D');
           this.lightknob.setInteractive({ useHandCursor: true, pixelPerfect: true }).on("pointerup", () => {
-            this.professor_enlightened.visible = false;
-            this.flash.visible = false;
+            this.professor_enlightened.visible = false;            
             this.professor.visible = true;
             this.professor.play({
               key: 'idle',
@@ -613,7 +613,7 @@ export class BootScene extends Phaser.Scene {
           });
         }, 1000);        
       }, 5000);                            
-    }, 8000);
+    }, 11000);
   }
 
 }
