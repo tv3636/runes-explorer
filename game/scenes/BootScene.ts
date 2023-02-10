@@ -26,7 +26,8 @@ const elements = [
   'staff',
   'sofa',
   'neon',
-  'jellydonut'
+  'jellydonut',
+  'catmask'
 ]
 
 const steps: any = {
@@ -136,6 +137,7 @@ export class BootScene extends Phaser.Scene {
   sofa: any;
   neon: any;
   jellydonut: any;
+  catmask: any;
 
   summonText: any;
   textbox: any;
